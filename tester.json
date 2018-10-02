@@ -1,0 +1,31 @@
+{
+  "resolution": [30, 40],
+  "columns": {
+    "formats": {
+      "5": { "color": "red", "align": "right", "text": "bold" },
+      "3": { "align": "right" },
+      "1": { "align": "left" }
+    }
+  },
+  "rows": {
+    "formats": {
+      "5": { "align": "right" },
+      "3": { "align": "right" },
+      "1": { "align": "left" }
+    }
+  },
+  "grid": [
+    "0": {
+      "0": {
+        "content": "Hello, world!",
+        "format": { "align": "center" }
+      }
+    },
+    "3": {
+      "1": {
+        "content": "=8 + 2 * 7",
+        "format": { "align": "center" }
+      }
+    }
+  ]
+}

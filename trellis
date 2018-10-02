@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'curses'
+
+Curses.init_screen
+
+begin
+  Curses.stdscr.clear
+  nrows = Curses.lines
+  ncols = Curses.cols
+ensure
+  Curses.stdscr.getch
+  Curses.close_screen
+end
+
+puts "nrows: #{nrows}"
+puts "ncols: #{ncols}"
