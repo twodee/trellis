@@ -1,17 +1,94 @@
 #!/usr/bin/env ruby
 
 require 'curses'
+require 'json'
+
+class Trellis
+  def initialize(path)
+    @path = path
+    @contents = JSON.parse(File.read(path))
+    @cache = {}
+  end
+
+  def text(r, c)
+    if !@cache.has_key?([r, c])
+      value = evaluate(r, c)
+      if value
+        @cache[[r, c]] = value
+      else
+        nil
+      end
+    else
+      @cache[[r, c]]
+    end
+  end
+
+  def evaluate(r, c)
+    cs = c.to_s
+    rs = r.to_s
+    if @contents.has_key?('grid') && @contents['grid'].has_key?(rs) && @contents['grid'][rs][cs]
+      @contents['grid'][rs][cs]['content']
+    else
+      nil
+    end
+  end
+
+  def columnEnd(i)
+    (i + 1) * 10 
+  end
+end
+
+path = ARGV.shift
+trellis = Trellis.new(path)
 
 Curses.init_screen
+Curses.start_color
+Curses.use_default_colors
+window = Curses.stdscr
 
 begin
-  Curses.stdscr.clear
-  nrows = Curses.lines
-  ncols = Curses.cols
+  puts "Curses.COLORS: #{Curses.colors}"
+  Curses.init_pair(1, Curses::COLOR_WHITE, Curses::COLOR_BLACK)
+  Curses.init_pair(2, Curses::COLOR_WHITE, 236)
+  rowColors = [1, 2]
+
+  window.clear
+  height = Curses.lines
+  width = Curses.cols
+
+  leftColumn = 0
+  rightColumn = 0
+  topRow = 0
+  bottomRow = height - 1
+
+  columnBorders = []
+  while trellis.columnEnd(rightColumn) < width - 1
+    columnBorders << trellis.columnEnd(rightColumn)
+    rightColumn += 1
+  end
+
+  (0..height).each do |y|
+    s = ' ' * width
+    columnBorders.each do |x|
+      s[x] = '|'
+    end
+    window.setpos(y, 0)
+
+    window.attrset(Curses.color_pair(rowColors[y % 2]) | Curses::A_NORMAL)
+    window.addstr(s)
+  end
+
+  (topRow..bottomRow).each do |r|
+    (leftColumn..rightColumn).each do |c|
+      text = trellis.text(r, c)
+      if text
+        window.setpos(r - topRow, columnBorders[c - leftColumn] + 1)
+        window.addstr(text[0...9])
+      end
+    end
+  end
+  
 ensure
   Curses.stdscr.getch
   Curses.close_screen
 end
-
-puts "nrows: #{nrows}"
-puts "ncols: #{ncols}"

@@ -1,5 +1,4 @@
 {
-  "resolution": [30, 40],
   "columns": {
     "formats": {
       "5": { "color": "red", "align": "right", "text": "bold" },
@@ -14,7 +13,7 @@
       "1": { "align": "left" }
     }
   },
-  "grid": [
+  "grid": {
     "0": {
       "0": {
         "content": "Hello, world!",
@@ -27,5 +26,5 @@
         "format": { "align": "center" }
       }
     }
-  ]
+  }
 }
