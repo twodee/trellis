@@ -3,6 +3,10 @@
 require 'curses'
 require 'json'
 
+# https://stac47.github.io/ruby/curses/tutorial/2014/01/21/ruby-and-curses-tutorial.html
+# http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/
+# https://ruby-doc.org/stdlib-2.0.0/libdoc/curses/rdoc/Curses.html
+
 class Trellis
   def initialize(path)
     @path = path
